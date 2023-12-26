@@ -61,8 +61,10 @@ public class Client {
             
             // Set up audio format
             AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
-            DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
-            SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+            //DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+            //SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+            SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat);
+            
             sourceDataLine.open(audioFormat);
             sourceDataLine.start();
             
