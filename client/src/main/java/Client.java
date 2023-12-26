@@ -54,10 +54,10 @@ public class Client {
 
     private static void playAudioStream() {
         try {
-            socket = new DatagramSocket();
+            socket = new DatagramSocket(4444);
             InetAddress address = InetAddress.getByName("localhost");
             byte[] buf = new byte[256];
-            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4444);
             
             // Set up audio format
             AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
