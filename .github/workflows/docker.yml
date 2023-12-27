@@ -6,7 +6,7 @@ jobs:
   build-java-app:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Set up JDK 21
       uses: actions/setup-java@v1
       with:
@@ -16,7 +16,7 @@ jobs:
     - name: Build with Maven - Server
       run: mvn -B package --file server/pom.xml
     - name: Save new repo as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifact
         path: ./
@@ -25,7 +25,7 @@ jobs:
     needs: [ build-java-app ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/artifact-download@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-artifact
         path: ./
@@ -44,7 +44,7 @@ jobs:
     needs: [ test-docker-image]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/artifact-download@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-artifact
         path: ./
