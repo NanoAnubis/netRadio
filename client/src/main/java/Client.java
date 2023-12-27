@@ -15,6 +15,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Arrays;
+
 import javax.sound.sampled.*;
 
 public class Client {
@@ -54,35 +58,60 @@ public class Client {
 
     private static void playAudioStream() {
         try {
-            socket = new DatagramSocket(4444);
             InetAddress address = InetAddress.getByName("localhost");
-            byte[] buf = new byte[256];
+            byte[] buf = new byte[1756];
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4444);
+
+            BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<byte[]>();
+
+            Thread packetReceiveThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        socket = new DatagramSocket(4444);
+
+                        while (running) {
+                            socket.receive(packet);
+                            packetBuffer.add(Arrays.copyOf(packet.getData(), packet.getLength()));
+                        }
+                    } catch (SocketException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             
-            // Set up audio format
-            AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
-            //DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
-            //SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-            SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat);
-            
-            sourceDataLine.open(audioFormat);
-            sourceDataLine.start();
-            
-            while (running) {
-                socket.receive(packet);
-                byte[] audioData = packet.getData();
-                sourceDataLine.write(audioData, 0, audioData.length);
-            }
-            
-            sourceDataLine.drain();
-            sourceDataLine.close();
-        } catch (SocketException e) {
+            Thread audioPlayThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
+                        SourceDataLine sourceDataLine = AudioSystem.getSourceDataLine(audioFormat);
+
+                        sourceDataLine.open(audioFormat);
+                        sourceDataLine.start();
+
+                        while (running) {
+                            //byte[] audioData = packet.getData();
+                            byte[] audioData = packetBuffer.poll();
+                            sourceDataLine.write(audioData, 0, audioData.length);
+                        }
+
+                        sourceDataLine.drain();
+                        sourceDataLine.close();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            packetReceiveThread.start();
+            audioPlayThread.start();
+
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        } 
     }
 }
 

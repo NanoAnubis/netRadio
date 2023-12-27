@@ -22,7 +22,7 @@ public class MockServer {
             DatagramSocket socket = new DatagramSocket(4445);
             InetAddress address = InetAddress.getByName("localhost");
             
-            byte[] buf = new byte[256];
+            byte[] buf = new byte[1756];
             int bytesRead;
             FileInputStream fis = new FileInputStream("C:\\Users\\LyubomirStoykov\\Downloads\\music.wav");
 
@@ -30,7 +30,7 @@ public class MockServer {
             while ((bytesRead = fis.read(buf)) != -1) {
                 DatagramPacket packet = new DatagramPacket(buf, bytesRead, address, 4444);
                 socket.send(packet);
-                Thread.sleep(100); // Delay to simulate real audio data rate
+                Thread.sleep(9); // Delay to simulate real audio data rate
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
