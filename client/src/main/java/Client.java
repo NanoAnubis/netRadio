@@ -93,7 +93,7 @@ public class Client {
     private static void playAudioStream(String ipAddress, int channel) {
         try {
             InetAddress address = InetAddress.getByName(ipAddress);
-            byte[] buf = new byte[1756];
+            byte[] buf = new byte[2200];
 
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4444);
 

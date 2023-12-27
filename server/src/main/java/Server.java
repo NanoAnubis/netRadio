@@ -12,7 +12,7 @@ public class Server {
         try {
             int packetSize = 2200;
 
-            File audioFile1 = new File("C:\\Temp\\Audio\\Strife.wav");
+            File audioFile1 = new File("./library/music.wav");
             File audioFile2 = new File("C:\\Temp\\Audio\\Byzantine Power Game.wav");
             File audioFile3 = new File("C:\\Temp\\Audio\\Notification.wav");
 
