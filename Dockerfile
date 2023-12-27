@@ -4,7 +4,6 @@ FROM openjdk:21
 # Set the working directory inside the container
 WORKDIR /app
 
-RUN mkdir /app/library
 COPY ./server/library-1/ /app/library-1/
 COPY ./server/library-2/ /app/library-2/
 COPY ./server/library-3/ /app/library-3/
