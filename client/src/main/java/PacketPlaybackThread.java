@@ -31,7 +31,7 @@ public class PacketPlaybackThread extends Thread {
                     byte[] audioData = packetBuffer.take();
                     if (audioData != null) {
                         sourceDataLine.write(audioData, 0, audioData.length);
-                        System.out.println("Packets in buffer: " + packetBuffer.size());
+                        // System.out.println("Packets in buffer: " + packetBuffer.size());
                     }
                 }
             }
