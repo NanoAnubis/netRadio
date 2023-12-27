@@ -1,11 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
 
-/**
- *
- * @author LyubomirStoykov
- */
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -24,6 +17,7 @@ import java.util.Arrays;
 import javax.sound.sampled.*;
 
 public class Client {
+
     private static DatagramSocket socket;
     private static boolean running;
 
@@ -51,7 +45,7 @@ public class Client {
         channelLabel.setFont(font);
         panel.add(channelLabel);
 
-        String[] channels = { "Channel 1", "Channel 2", "Channel 3" };
+        String[] channels = {"Channel 1", "Channel 2", "Channel 3"};
         JComboBox<String> channelDropdown = new JComboBox<>(channels);
         channelDropdown.setFont(font);
         panel.add(channelDropdown);
@@ -62,7 +56,7 @@ public class Client {
                 running = true;
 
                 try {
-                    socket = new DatagramSocket(4444);
+                    socket = new DatagramSocket(44333);
                 } catch (SocketException socketException) {
                     socketException.printStackTrace();
                 }
@@ -95,7 +89,7 @@ public class Client {
             InetAddress address = InetAddress.getByName(ipAddress);
             byte[] buf = new byte[2200];
 
-            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4444);
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 44333);
 
             BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<byte[]>();
 
@@ -108,11 +102,13 @@ public class Client {
                                 break;
                             }
                             socket.receive(packet);
-                            packetBuffer.add(Arrays.copyOf(packet.getData(), packet.getLength()));
+                            packetBuffer.put(Arrays.copyOf(packet.getData(), packet.getLength()));
                         }
                     } catch (SocketException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -132,15 +128,18 @@ public class Client {
                             if (!running) {
                                 break;
                             }
-                            byte[] audioData = packetBuffer.poll();
+                            byte[] audioData = packetBuffer.take();
                             if (audioData != null) {
                                 sourceDataLine.write(audioData, 0, audioData.length);
+                                System.out.println("Packets in buffer: " + packetBuffer.size());
                             }
                         }
 
                         // sourceDataLine.drain();
                         sourceDataLine.close();
                     } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
