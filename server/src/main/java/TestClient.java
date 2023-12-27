@@ -1,6 +1,7 @@
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.sound.sampled.AudioFormat;
@@ -12,7 +13,7 @@ public class TestClient {
 
     public static void main(String[] args) {
 
-        int packetSize = 1024;
+        int packetSize = 2200;
 
         BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<byte[]>();
 
@@ -25,7 +26,7 @@ public class TestClient {
                     //  - sample bit depth of 16, 
                     //  - two channels, 
                     //  - signed,
-                    //  - and little endian
+                    //  - little endian
                     AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
                     DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
                     SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
@@ -34,7 +35,8 @@ public class TestClient {
 
                     while (true) {
                         byte[] packet = packetBuffer.take();
-                        audioLine.write(packet, 0, packetSize);
+                        audioLine.write(packet, 0, packet.length);
+                        System.out.println("Packets in buffer: " + packetBuffer.size());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -52,13 +54,7 @@ public class TestClient {
                     while (true) {
                         DatagramPacket packet = new DatagramPacket(receivedData, receivedData.length);
                         socket.receive(packet);
-
-                        int chunkSize = Math.min(packetSize, packet.getLength());
-                        byte[] chunk = new byte[chunkSize];
-                        System.arraycopy(packet.getData(), 0, chunk, 0, chunkSize);
-
-                        packetBuffer.put(chunk);
-                        // System.out.println("Packets in buffer: " + packetBuffer.size());
+                        packetBuffer.put(Arrays.copyOf(packet.getData(), packet.getLength()));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

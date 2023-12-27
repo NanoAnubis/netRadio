@@ -10,7 +10,7 @@ public class Server {
 
     public static void main(String[] args) {
         try {
-            int packetSize = 1024;
+            int packetSize = 2200;
 
             File audioFile1 = new File("C:\\Temp\\Audio\\Strife.wav");
             File audioFile2 = new File("C:\\Temp\\Audio\\Byzantine Power Game.wav");
@@ -21,6 +21,7 @@ public class Server {
             DatagramSocket socket = new DatagramSocket();
 
             // Loop the audio file
+            short sleepSwitch = 0;
             while (true) {
                 // Supports only AIFF, AU and WAV
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile1);
@@ -35,7 +36,8 @@ public class Server {
 
                     socket.send(packet);
                     // Delay to approximate stream rate to playback rate
-                    Thread.sleep(4);
+                    Thread.sleep(sleepSwitch < 1 ? 10 : 9);
+                    sleepSwitch = (short) ((sleepSwitch + 1) % 4);
                 }
             }
         } catch (Exception e) {
