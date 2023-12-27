@@ -16,8 +16,7 @@ public class TestClient {
 
         BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<byte[]>();
 
-        // Playback thread
-        Thread thread1 = new Thread(new Runnable() {
+        Thread playbackThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -43,8 +42,7 @@ public class TestClient {
             }
         });
 
-        // Packet reciever thread
-        Thread thread2 = new Thread(new Runnable() {
+        Thread packetRecieverThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -54,8 +52,12 @@ public class TestClient {
                     while (true) {
                         DatagramPacket packet = new DatagramPacket(receivedData, receivedData.length);
                         socket.receive(packet);
-                        packetBuffer.put(packet.getData());
 
+                        int chunkSize = Math.min(packetSize, packet.getLength());
+                        byte[] chunk = new byte[chunkSize];
+                        System.arraycopy(packet.getData(), 0, chunk, 0, chunkSize);
+
+                        packetBuffer.put(chunk);
                         // System.out.println("Packets in buffer: " + packetBuffer.size());
                     }
                 } catch (Exception e) {
@@ -64,7 +66,7 @@ public class TestClient {
             }
         });
 
-        thread1.start();
-        thread2.start();
+        packetRecieverThread.start();
+        playbackThread.start();
     }
 }

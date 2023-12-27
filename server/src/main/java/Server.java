@@ -14,6 +14,7 @@ public class Server {
 
             File audioFile1 = new File("C:\\Temp\\Audio\\Strife.wav");
             File audioFile2 = new File("C:\\Temp\\Audio\\Byzantine Power Game.wav");
+            File audioFile3 = new File("C:\\Temp\\Audio\\Notification.wav");
 
             InetAddress serverIP = InetAddress.getByName("localhost");
             int serverPort = 4444;
@@ -22,7 +23,7 @@ public class Server {
             // Loop the audio file
             while (true) {
                 // Supports only AIFF, AU and WAV
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile2);
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile1);
 
                 byte[] audioBytes = audioStream.readAllBytes();
 
@@ -34,7 +35,7 @@ public class Server {
 
                     socket.send(packet);
                     // Delay to approximate stream rate to playback rate
-                    Thread.sleep(5);
+                    Thread.sleep(4);
                 }
             }
         } catch (Exception e) {
