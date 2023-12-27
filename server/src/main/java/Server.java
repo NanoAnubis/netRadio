@@ -2,6 +2,8 @@
 import java.io.FileInputStream;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Server {
@@ -10,7 +12,8 @@ public class Server {
         try {
             Properties properties = new Properties();
             String currentDirectory = System.getProperty("user.dir");
-            String configFile = currentDirectory + "/../.properties";
+            String configFile = currentDirectory
+                    + (Files.exists(Paths.get(currentDirectory + "/../.properties")) ? "/../.properties" : "/.properties");
             properties.load(new FileInputStream(configFile));
 
             int packetSize = Integer.parseInt(properties.getProperty("UDP_PACKET_SIZE"));
