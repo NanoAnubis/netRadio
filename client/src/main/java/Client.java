@@ -7,7 +7,9 @@
  * @author LyubomirStoykov
  */
 import javax.swing.*;
-//import java.awt.*;
+import javax.swing.border.EmptyBorder;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -30,6 +32,35 @@ public class Client {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
 
+        JTextField ipAddressField = new JTextField(15);
+        ipAddressField.setText("127.0.0.1");
+
+        String[] channels = { "Channel 1", "Channel 2", "Channel 3" };
+        JComboBox<String> channelDropdown = new JComboBox<>(channels);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2, 10, 10)); // 3 rows, 2 columns, 10px horizontal and vertical gaps
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10)); // 10px padding on all sides
+
+        Font font = new Font("Arial", Font.PLAIN, 16); // Custom font
+
+        JLabel channelLabel = new JLabel("Channel:");
+        channelLabel.setFont(font);
+        panel.add(channelLabel);
+
+        //JComboBox<String> channelDropdown = new JComboBox<>(channels);
+        channelDropdown.setFont(font);
+        panel.add(channelDropdown);
+
+        JLabel ipAddressLabel = new JLabel("IP Address:");
+        ipAddressLabel.setFont(font);
+        panel.add(ipAddressLabel);
+
+        //JTextField ipAddressField = new JTextField(15);
+        ipAddressField.setFont(font);
+        //ipAddressField.setText("localhost");
+        panel.add(ipAddressField);
+
         JButton playButton = new JButton("Play");
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +72,7 @@ public class Client {
                     socketException.printStackTrace();
                 }
 
-                playAudioStream();
+                playAudioStream(ipAddressField.getText(), channelDropdown.getSelectedIndex() + 1);
             }
         });
 
@@ -56,18 +87,23 @@ public class Client {
             }
         });
 
-        JPanel panel = new JPanel();
+        //JButton playButton = new JButton("Play");
+        playButton.setFont(font);
         panel.add(playButton);
-        panel.add(stopButton);
-        frame.add(panel);
 
+        //JButton stopButton = new JButton("Stop");
+        stopButton.setFont(font);
+        panel.add(stopButton);
+
+        frame.add(panel);
         frame.setVisible(true);
     }
 
-    private static void playAudioStream() {
+    private static void playAudioStream(String ipAddress, int channel) {
         try {
-            InetAddress address = InetAddress.getByName("localhost");
+            InetAddress address = InetAddress.getByName(ipAddress);
             byte[] buf = new byte[1756];
+
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4444);
 
             BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<byte[]>();
@@ -90,7 +126,7 @@ public class Client {
                     }
                 }
             });
-            
+
             Thread audioPlayThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -111,7 +147,7 @@ public class Client {
                             }
                         }
 
-                        //sourceDataLine.drain();
+                        // sourceDataLine.drain();
                         sourceDataLine.close();
                     } catch (LineUnavailableException e) {
                         e.printStackTrace();
@@ -124,7 +160,6 @@ public class Client {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
     }
 }
-
