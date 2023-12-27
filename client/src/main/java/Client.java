@@ -32,34 +32,29 @@ public class Client {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
 
-        JTextField ipAddressField = new JTextField(15);
-        ipAddressField.setText("127.0.0.1");
-
-        String[] channels = { "Channel 1", "Channel 2", "Channel 3" };
-        JComboBox<String> channelDropdown = new JComboBox<>(channels);
-
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2, 10, 10)); // 3 rows, 2 columns, 10px horizontal and vertical gaps
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10)); // 10px padding on all sides
+        panel.setLayout(new GridLayout(3, 2, 10, 10));
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        Font font = new Font("Arial", Font.PLAIN, 16); // Custom font
-
-        JLabel channelLabel = new JLabel("Channel:");
-        channelLabel.setFont(font);
-        panel.add(channelLabel);
-
-        //JComboBox<String> channelDropdown = new JComboBox<>(channels);
-        channelDropdown.setFont(font);
-        panel.add(channelDropdown);
+        Font font = new Font("Arial", Font.PLAIN, 16);
 
         JLabel ipAddressLabel = new JLabel("IP Address:");
         ipAddressLabel.setFont(font);
         panel.add(ipAddressLabel);
 
-        //JTextField ipAddressField = new JTextField(15);
+        JTextField ipAddressField = new JTextField(15);
+        ipAddressField.setText("127.0.0.1");
         ipAddressField.setFont(font);
-        //ipAddressField.setText("localhost");
         panel.add(ipAddressField);
+
+        JLabel channelLabel = new JLabel("Channel:");
+        channelLabel.setFont(font);
+        panel.add(channelLabel);
+
+        String[] channels = { "Channel 1", "Channel 2", "Channel 3" };
+        JComboBox<String> channelDropdown = new JComboBox<>(channels);
+        channelDropdown.setFont(font);
+        panel.add(channelDropdown);
 
         JButton playButton = new JButton("Play");
         playButton.addActionListener(new ActionListener() {
@@ -75,6 +70,8 @@ public class Client {
                 playAudioStream(ipAddressField.getText(), channelDropdown.getSelectedIndex() + 1);
             }
         });
+        playButton.setFont(font);
+        panel.add(playButton);
 
         JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(new ActionListener() {
@@ -86,12 +83,6 @@ public class Client {
                 }
             }
         });
-
-        //JButton playButton = new JButton("Play");
-        playButton.setFont(font);
-        panel.add(playButton);
-
-        //JButton stopButton = new JButton("Stop");
         stopButton.setFont(font);
         panel.add(stopButton);
 
