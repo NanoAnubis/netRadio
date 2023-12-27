@@ -7,7 +7,7 @@
  * @author LyubomirStoykov
  */
 import javax.swing.*;
-import java.awt.*;
+//import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -34,6 +34,13 @@ public class Client {
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 running = true;
+
+                try {
+                    socket = new DatagramSocket(4444);
+                } catch (SocketException socketException) {
+                    socketException.printStackTrace();
+                }
+
                 playAudioStream();
             }
         });
@@ -42,6 +49,7 @@ public class Client {
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 running = false;
+
                 if (socket != null) {
                     socket.close();
                 }
@@ -68,9 +76,10 @@ public class Client {
                 @Override
                 public void run() {
                     try {
-                        socket = new DatagramSocket(4444);
-
-                        while (running) {
+                        while (true) {
+                            if (!running) {
+                                break;
+                            }
                             socket.receive(packet);
                             packetBuffer.add(Arrays.copyOf(packet.getData(), packet.getLength()));
                         }
@@ -92,13 +101,17 @@ public class Client {
                         sourceDataLine.open(audioFormat);
                         sourceDataLine.start();
 
-                        while (running) {
-                            //byte[] audioData = packet.getData();
+                        while (true) {
+                            if (!running) {
+                                break;
+                            }
                             byte[] audioData = packetBuffer.poll();
-                            sourceDataLine.write(audioData, 0, audioData.length);
+                            if (audioData != null) {
+                                sourceDataLine.write(audioData, 0, audioData.length);
+                            }
                         }
 
-                        sourceDataLine.drain();
+                        //sourceDataLine.drain();
                         sourceDataLine.close();
                     } catch (LineUnavailableException e) {
                         e.printStackTrace();

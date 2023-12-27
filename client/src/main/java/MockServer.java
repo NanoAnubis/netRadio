@@ -7,14 +7,14 @@
  *
  * @author LyubomirStoykov
  */
-import javax.sound.sampled.*;
+//import javax.sound.sampled.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Arrays;
+//import java.util.Arrays;
 
 public class MockServer {
     public static void main(String[] args) {
@@ -32,6 +32,8 @@ public class MockServer {
                 socket.send(packet);
                 Thread.sleep(9); // Delay to simulate real audio data rate
             }
+            socket.close();
+            fis.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
