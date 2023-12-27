@@ -8,7 +8,7 @@ RUN mkdir /app/library
 COPY ./server/library/music.wav /app/library/music.wav
 
 # Copy the server application JAR file to the container
-COPY ./server/target/server-1.0-jar-with-dependencies.jar /app/Server.jar
+COPY ./server/server-fortesting.jar /app/Server.jar
 
 # Expose the port on which the server will listen
 EXPOSE 4445/udp
