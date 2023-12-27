@@ -36,20 +36,20 @@ public class ChannelThread extends Thread {
                 int bytesRead;
                 byte[] buffer = new byte[packetSize];
 
-                short sleepSwitch = 0;
+                boolean sleepSwitch = false;
                 while ((bytesRead = audioFileStream.read(buffer)) != -1) {
                     DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address, channelPort);
                     socket.send(packet);
 
                     // Delay to approximate stream rate to playback rate
-                    Thread.sleep(sleepSwitch < 1 ? 10 : 9);
-                    sleepSwitch = (short) ((sleepSwitch + 1) % 4);
+                    Thread.sleep(sleepSwitch ? 12 : 9);
+                    sleepSwitch = !sleepSwitch;
                 }
 
                 audioFileStream.close();
-                
-                // Sleep for half a second to compensate for client delay
-                Thread.sleep(500);
+
+                // Sleep for a second to compensate for client delay
+                Thread.sleep(1000);
             }
 
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class ChannelThread extends Thread {
         }
     }
 
-    private static String getRandomFile(String directoryPath, String lastFile) {
+    private String getRandomFile(String directoryPath, String lastFile) {
         File[] files = new File(directoryPath).listFiles();
 
         if (files != null && files.length > 0) {
