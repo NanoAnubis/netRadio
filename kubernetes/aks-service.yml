@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: piss-server-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 44111
+    targetPort: 44111
+    protocol: UDP
+    name: chan1
+  - port: 44222
+    targetPort: 44222
+    protocol: UDP
+    name: chan2
+  - port: 44333
+    targetPort: 44333
+    protocol: UDP    
+    name: chan3
+  selector:
+    app: piss-server

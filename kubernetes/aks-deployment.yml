@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piss-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: piss-server
+  template:
+    metadata:
+      labels:
+        app: piss-server
+    spec:
+      containers:
+      - name: piss-server-container
+        #image: your-container:latest
+        image: docker.io/nanoanubis/piss-server:latest
+        ports:
+        #- containerPort: 44111
+        #- containerPort: 44222
+        #- containerPort: 44333

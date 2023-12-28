@@ -7,7 +7,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.aks_cluster_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  node_resource_group = azurerm_resource_group.rg.name
   dns_prefix          = var.aks_dns_prefix
   sku_tier            = "Free"
 
