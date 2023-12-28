@@ -1,10 +1,16 @@
-name: Docker Image CI
+name: Docker Push-Deploy
 
 on: 
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: piss-server
+  KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
 
 jobs:
   build-java-app:
@@ -63,3 +69,27 @@ jobs:
       run: docker tag "piss-server" ${{ secrets.DOCKERHUB_USERNAME }}"/piss-server"
     - name: Docker Push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}"/piss-server"
+
+  deploy-to-kubernetes:
+    needs: [ push-docker-image]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Install and setup kubectl
+      uses: azure/setup-kubectl@v1
+    - name: Replace image in the Kubernetes deployment file
+      run: |
+        sed -i 's|your-container:.*|your-container:${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest|' ./kubernetes/aks-deployment.yml
+    - name: Load kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl --kubeconfig kubeconfig.yaml apply -f ./kubernetes/aks-deployment.yml
+    - name: Start Load balancer
+      run: |
+        kubectl --kubeconfig kubeconfig.yaml apply -f ./kubernetes/aks-service.yml
+    - name: Get IP
+      run: |
+        kubectl --kubeconfig kubeconfig.yaml get service piss-server-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'

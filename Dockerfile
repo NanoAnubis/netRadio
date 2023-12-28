@@ -1,5 +1,8 @@
 # Use a Java base image
-FROM openjdk:21
+FROM ubuntu:latest
+
+# Install JRE 21
+RUN apt-get update && apt-get install -y openjdk-21-jre
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -16,6 +19,8 @@ COPY .properties /app/.properties
 EXPOSE 44111/udp
 EXPOSE 44222/udp
 EXPOSE 44333/udp
+
+
 
 # Set the command to run the server application
 CMD ["java", "-jar", "Server.jar"]
