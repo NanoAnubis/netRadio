@@ -3,3 +3,6 @@
 /.vscode/
 /client/build/
 /server/build/
+/terraform/.terraform.lock.hcl
+/terraform/.terraform/
+/terraform/terraform.tfstate
