@@ -31,6 +31,6 @@ jobs:
     - name: Start Load balancer
       run: |
         kubectl --kubeconfig kubeconfig.yaml apply -f ./kubernetes/aks-service.yml
-      name: Get IP
+    - name: Get IP
       run: |
         kubectl --kubeconfig kubeconfig.yaml get service piss-server-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
