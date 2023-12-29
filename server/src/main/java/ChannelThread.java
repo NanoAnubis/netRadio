@@ -32,8 +32,7 @@ public class ChannelThread extends Thread {
             DatagramPacket request = new DatagramPacket(testBuff, testBuff.length);
             socket.receive(request);
 
-            InetAddress address2 = request.getAddress();
-            int port = request.getPort();          
+            InetAddress address2 = request.getAddress();      
             
             String lastFile = "";
             while (true) {
@@ -45,7 +44,7 @@ public class ChannelThread extends Thread {
 
                     boolean sleepSwitch = false;
                     while ((bytesRead = audioFileStream.read(buffer)) != -1) {
-                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address2, port);
+                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address2, this.channelPort);
                         socket.send(packet);
 
                         System.out.println("Sending packets from: " + this.channelPort);
