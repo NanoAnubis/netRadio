@@ -28,6 +28,13 @@ public class ChannelThread extends Thread {
     @Override
     public void run() {
         try {
+            byte[] testBuff = new byte[3];
+            DatagramPacket request = new DatagramPacket(testBuff, testBuff.length);
+            socket.receive(request);
+
+            InetAddress address2 = request.getAddress();
+            int port = request.getPort();          
+            
             String lastFile = "";
             while (true) {
                 lastFile = getRandomFile(channelLibrary, lastFile);
@@ -38,9 +45,11 @@ public class ChannelThread extends Thread {
 
                     boolean sleepSwitch = false;
                     while ((bytesRead = audioFileStream.read(buffer)) != -1) {
-                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address, channelPort);
+                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address2, port);
                         socket.send(packet);
 
+                        System.out.println("Sending packets from: " + this.channelPort);
+                        
                         // Delay to approximate stream rate to playback rate
                         Thread.sleep(sleepSwitch ? 12 : 9);
                         sleepSwitch = !sleepSwitch;
