@@ -30,7 +30,6 @@ public class PacketPlaybackThread extends ClientThreadBase {
                 byte[] audioData = packetBuffer.take();
                 if (audioData != null && this.sourceDataLine.isOpen()) {
                     sourceDataLine.write(audioData, 0, audioData.length);
-                    System.out.println("Packets in buffer: " + packetBuffer.size());
                 }
             }
         } catch (LineUnavailableException exception) {

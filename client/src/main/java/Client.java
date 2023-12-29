@@ -84,7 +84,7 @@ public class Client {
 
             JButton stopButton = new JButton("Stop");
             stopButton.setFont(font);
-            stopButton.addActionListener((ActionEvent e) -> {
+            stopButton.addActionListener((ActionEvent event) -> {
                 if (packetRecieverThread != null && !packetRecieverThread.isAlive()) {
                     packetRecieverThread.killThread();
                 }
