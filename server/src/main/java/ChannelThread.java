@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -27,33 +28,31 @@ public class ChannelThread extends Thread {
     @Override
     public void run() {
         try {
-            // Run indefinately
             String lastFile = "";
             while (true) {
                 lastFile = getRandomFile(channelLibrary, lastFile);
-                FileInputStream audioFileStream = new FileInputStream(lastFile);
 
-                int bytesRead;
-                byte[] buffer = new byte[packetSize];
+                try (FileInputStream audioFileStream = new FileInputStream(lastFile)) {
+                    int bytesRead;
+                    byte[] buffer = new byte[packetSize];
 
-                boolean sleepSwitch = false;
-                while ((bytesRead = audioFileStream.read(buffer)) != -1) {
-                    DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address, channelPort);
-                    socket.send(packet);
+                    boolean sleepSwitch = false;
+                    while ((bytesRead = audioFileStream.read(buffer)) != -1) {
+                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address, channelPort);
+                        socket.send(packet);
 
-                    // Delay to approximate stream rate to playback rate
-                    Thread.sleep(sleepSwitch ? 12 : 9);
-                    sleepSwitch = !sleepSwitch;
+                        // Delay to approximate stream rate to playback rate
+                        Thread.sleep(sleepSwitch ? 12 : 9);
+                        sleepSwitch = !sleepSwitch;
+                    }
                 }
 
-                audioFileStream.close();
-
-                // Sleep for a second to compensate for client delay
-                Thread.sleep(1000);
+                Thread.sleep(1000);// Compensating for client delay
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            System.out.println("IOException: " + exception.getMessage());
+        } catch (InterruptedException exception) {
+            System.out.println("InterruptedException: " + exception.getMessage());
         }
     }
 
