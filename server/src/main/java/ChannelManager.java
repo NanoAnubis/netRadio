@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -40,23 +41,19 @@ public class ChannelManager {
         address = InetAddress.getByName(properties.getProperty("ADDRESS"));
     }
 
-    public void Run() {
-        try {
-            try (DatagramSocket socket = new DatagramSocket(Integer.parseInt(properties.getProperty("SERVER_PORT")))) {
-                Thread channel1Thread = new ChannelThread(address, socket, packetSize, channel1Port, channel1Library);
-                Thread channel2Thread = new ChannelThread(address, socket, packetSize, channel2Port, channel2Library);
-                Thread channel3Thread = new ChannelThread(address, socket, packetSize, channel3Port, channel3Library);
+    public void Run() throws SocketException, InterruptedException {
+        try (DatagramSocket socket = new DatagramSocket(Integer.parseInt(properties.getProperty("SERVER_PORT")))) {
+            Thread channel1Thread = new ChannelThread(address, socket, packetSize, channel1Port, channel1Library);
+            Thread channel2Thread = new ChannelThread(address, socket, packetSize, channel2Port, channel2Library);
+            Thread channel3Thread = new ChannelThread(address, socket, packetSize, channel3Port, channel3Library);
 
-                channel1Thread.start();
-                channel2Thread.start();
-                channel3Thread.start();
+            channel1Thread.start();
+            channel2Thread.start();
+            channel3Thread.start();
 
-                channel1Thread.join();
-                channel2Thread.join();
-                channel3Thread.join();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            channel1Thread.join();
+            channel2Thread.join();
+            channel3Thread.join();
         }
     }
 }
