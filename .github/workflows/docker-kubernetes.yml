@@ -2,7 +2,7 @@ name: Docker Push-Deploy
 
 on:
   push:
-    branches: [ main, feature-security-testing ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
