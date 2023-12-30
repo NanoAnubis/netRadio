@@ -1,6 +1,6 @@
 name: Docker Push-Deploy
 
-on: 
+on:
   push:
     branches: [ main, feature-style ]
   pull_request:

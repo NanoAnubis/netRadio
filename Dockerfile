@@ -20,7 +20,5 @@ EXPOSE 44111/udp
 EXPOSE 44222/udp
 EXPOSE 44333/udp
 
-
-
 # Set the command to run the server application
 CMD ["java", "-jar", "Server.jar"]

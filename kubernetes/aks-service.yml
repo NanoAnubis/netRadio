@@ -15,7 +15,7 @@ spec:
     name: chan2
   - port: 44333
     targetPort: 44333
-    protocol: UDP    
+    protocol: UDP
     name: chan3
   selector:
     app: piss-server
