@@ -9,6 +9,6 @@ spec:
     targetPort: 44000
     protocol: UDP
     name: server-port
-
   selector:
     app: piss-server
+
