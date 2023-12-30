@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -90,6 +93,23 @@ public class Client {
                 }
                 if (packetPlaybackThread != null && !packetPlaybackThread.isAlive()) {
                     packetPlaybackThread.killThread();
+                }
+                
+            });
+
+            frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    try {
+                        DatagramSocket socket = new DatagramSocket();
+                        byte[] data = "close".getBytes();
+                        InetAddress address = InetAddress.getByName(ipAddressField.getText());
+                        DatagramPacket packet = new DatagramPacket(data, data.length, address, 44000);
+                        socket.send(packet);
+                        socket.close();
+                    } catch (IOException exception) {
+                        System.out.println("IOException: " + exception.getMessage());
+                    }
                 }
             });
 

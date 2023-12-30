@@ -16,9 +16,13 @@ public class ChannelThread extends Thread {
     private final int packetSize;
     private final String channelLibrary;
 
-    public ChannelThread(InetAddress address, DatagramSocket socket, int packetSize, int channelPort, String channelLibrary) {
+    public ChannelThread(InetAddress address, int packetSize, int channelPort, String channelLibrary) {
         this.address = address;
-        this.socket = socket;
+        try {
+            this.socket = new DatagramSocket();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.channelPort = channelPort;
         this.packetSize = packetSize;
@@ -27,13 +31,7 @@ public class ChannelThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            byte[] testBuff = new byte[3];
-            DatagramPacket request = new DatagramPacket(testBuff, testBuff.length);
-            socket.receive(request);
-
-            InetAddress address2 = request.getAddress();      
-            
+        try { 
             String lastFile = "";
             while (true) {
                 lastFile = getRandomFile(channelLibrary, lastFile);
@@ -44,12 +42,11 @@ public class ChannelThread extends Thread {
 
                     boolean sleepSwitch = false;
                     while ((bytesRead = audioFileStream.read(buffer)) != -1) {
-                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, address2, this.channelPort);
+                        DatagramPacket packet = new DatagramPacket(buffer, bytesRead, this.address, this.channelPort);
                         socket.send(packet);
 
                         System.out.println("Sending packets from: " + this.channelPort);
-                        
-                        // Delay to approximate stream rate to playback rate
+
                         Thread.sleep(sleepSwitch ? 12 : 9);
                         sleepSwitch = !sleepSwitch;
                     }
