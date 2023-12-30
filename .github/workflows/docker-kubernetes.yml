@@ -21,8 +21,8 @@ jobs:
     - uses: editorconfig-checker/action-editorconfig-checker@main
     - run: editorconfig-checker
 
-  makrdown-lint:
-    name: makdown-lint
+  markdown-lint:
+    name: markdown-lint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
