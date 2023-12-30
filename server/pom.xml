@@ -39,12 +39,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>10.12.6</version>
                 <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
-                    <propertyExpansion>
-                        <project.basedir>${project.basedir}/server</project.basedir>
-                    </propertyExpansion>
+                    <configLocation>sun_checks.xml</configLocation>
                 </configuration>
             </plugin>
         </plugins>
