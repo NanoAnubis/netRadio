@@ -2,7 +2,7 @@ name: Docker Push-Deploy
 
 on: 
   push:
-    branches: [ main ]
+    branches: [ main, feature-style ]
   pull_request:
     branches: [ main ]
 
@@ -25,6 +25,8 @@ jobs:
       run: mvn -B package --file client/pom.xml
     - name: Build with Maven - Server
       run: mvn -B package --file server/pom.xml
+    - name: Check style and lint with Checkstyle and PMD
+      run: mvn checkstyle:check pmd:check
     - name: Save new repo as artifact
       uses: actions/upload-artifact@v4
       with:
