@@ -1,6 +1,6 @@
 name: Docker Push-Deploy
 
-on: 
+on:
   push:
     branches: [ main ]
   pull_request:
@@ -13,6 +13,21 @@ env:
 
 
 jobs:
+  editorconfig-checker:
+    name: editorconfig-checker
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: editorconfig-checker/action-editorconfig-checker@main
+    - run: editorconfig-checker
+
+  makrdown-lint:
+    name: makdown-lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: npx markdown-cli *.md
+
   build-java-app:
     runs-on: ubuntu-latest
     steps:
@@ -25,6 +40,10 @@ jobs:
       run: mvn -B package --file client/pom.xml
     - name: Build with Maven - Server
       run: mvn -B package --file server/pom.xml
+    - name: Checkstyle check - Client
+      run: mvn checkstyle:check --file client/pom.xml
+    - name: Checkstyle check - Sever
+      run: mvn checkstyle:check --file server/pom.xml
     - name: Save new repo as artifact
       uses: actions/upload-artifact@v4
       with:
