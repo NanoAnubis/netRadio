@@ -2,7 +2,7 @@ name: Docker Push-Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature-security-testing ]
   pull_request:
     branches: [ main ]
 
@@ -28,7 +28,20 @@ jobs:
     - uses: actions/checkout@v3
     - run: npx markdown-cli *.md
 
+  sonarcloud-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   build-java-app:
+    needs: [ sonarcloud-scan ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -44,6 +57,18 @@ jobs:
       run: mvn checkstyle:check --file client/pom.xml
     - name: Checkstyle check - Sever
       run: mvn checkstyle:check --file server/pom.xml
+    - name: Set up Node 14
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+    - name: Install Snyk CLI
+      run: npm install -g snyk
+    - name: Authenticate Snyk
+      run: snyk auth ${{ secrets.SNYK_TOKEN }}
+    - name: Run Snyk Open Source Test
+      run: snyk test
+    - name: Run Snyk Code Test
+      run: snyk code test
     - name: Save new repo as artifact
       uses: actions/upload-artifact@v4
       with:
