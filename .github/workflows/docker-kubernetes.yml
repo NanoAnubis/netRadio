@@ -13,7 +13,16 @@ env:
 
 
 jobs:
+  editorconfig-checker:
+    name: editorconfig-checker
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: editorconfig-checker/action-editorconfig-checker@main
+    - run: editorconfig-checker
+
   build-java-app:
+    needs: [ editorconfig-checker ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
