@@ -60,7 +60,7 @@ jobs:
     - name: Run Snyk Open Source Test
       run: snyk test --all-projects
     - name: Run Snyk Code Test
-      run: snyk code test
+      run: snyk code test --all-projects
     - name: Save new repo as artifact
       uses: actions/upload-artifact@v4
       with:
