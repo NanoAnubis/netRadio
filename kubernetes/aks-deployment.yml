@@ -14,9 +14,8 @@ spec:
     spec:
       containers:
       - name: piss-server-container
-        #image: your-container:latest
-        image: docker.io/nanoanubis/piss-server:latest
+        image: your-container:latest
+        #image: docker.io/nanoanubis/piss-server:latest
         ports:
-        #- containerPort: 44111
-        #- containerPort: 44222
-        #- containerPort: 44333
+        - containerPort: 44000
+

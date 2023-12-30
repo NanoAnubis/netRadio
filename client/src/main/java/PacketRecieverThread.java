@@ -14,19 +14,35 @@ public class PacketRecieverThread extends ClientThreadBase {
     private final DatagramSocket socket;
     private final DatagramPacket packet;
 
+    private final int packetSize;
+
+    private final int channelPort;
+    private final String address;
+
     public PacketRecieverThread(BlockingQueue<byte[]> packetBuffer, String address, int channelPort, int packetSize) throws UnknownHostException, SocketException {
         this.packetBuffer = packetBuffer;
         this.socket = new DatagramSocket(channelPort);
-        this.packet = new DatagramPacket(new byte[packetSize], packetSize, InetAddress.getByName(address), channelPort);
+        this.packetSize = packetSize;
+
+        this.channelPort = channelPort;
+        this.address = address;
+
+        this.packet = new DatagramPacket(new byte[packetSize], this.packetSize, InetAddress.getByName(address), this.channelPort);
     }
 
     @Override
     public void run() {
         try {
+            byte[] data = "open".getBytes();
+            InetAddress address = InetAddress.getByName(this.address);
+            DatagramPacket packet = new DatagramPacket(data, data.length, address, 44000);
+            socket.send(packet);
+
             Thread thisThread = Thread.currentThread();
             while (this.blinker == thisThread) {
                 this.socket.receive(this.packet);
                 byte[] audioData = this.packet.getData();
+
                 if (audioData != null) {
                     this.packetBuffer.put(Arrays.copyOf(audioData, audioData.length));
                 }
