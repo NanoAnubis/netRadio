@@ -107,7 +107,7 @@ jobs:
       run: snyk code test --all-projects
 
   test-docker-image:
-    needs: [ build-java-app ]
+    needs: [ checkstyle, sonarcloud, snyk ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v4
