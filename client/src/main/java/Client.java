@@ -94,7 +94,6 @@ public class Client {
                 if (packetPlaybackThread != null && !packetPlaybackThread.isAlive()) {
                     packetPlaybackThread.killThread();
                 }
-                
             });
 
             frame.addWindowListener(new java.awt.event.WindowAdapter() {

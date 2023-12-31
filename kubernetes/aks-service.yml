@@ -11,4 +11,3 @@ spec:
     name: server-port
   selector:
     app: piss-server
-

@@ -31,7 +31,7 @@ public class ChannelThread extends Thread {
 
     @Override
     public void run() {
-        try { 
+        try {
             String lastFile = "";
             while (true) {
                 lastFile = getRandomFile(channelLibrary, lastFile);

@@ -27,7 +27,6 @@ public class ChannelManager extends Thread {
     private Thread[] threads;
     private Map<InetAddress, Thread[]> threadMap;
 
-
     public ChannelManager() throws IOException, InterruptedException, SocketException {
 
         currentDirectory = System.getProperty("user.dir");
@@ -44,7 +43,7 @@ public class ChannelManager extends Thread {
         channel1Library = currentDirectory + properties.getProperty("SERVER_CHANNEL_1_AUDIO_LIBRARY");
         channel2Library = currentDirectory + properties.getProperty("SERVER_CHANNEL_2_AUDIO_LIBRARY");
         channel3Library = currentDirectory + properties.getProperty("SERVER_CHANNEL_3_AUDIO_LIBRARY");
-  
+
         threads = new Thread[3];
         threadMap = new HashMap<>();
 
@@ -110,5 +109,4 @@ public class ChannelManager extends Thread {
 
         //socket.close();
     }
-    
 }
