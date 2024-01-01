@@ -1,4 +1,4 @@
-name: Docker Push-Deploy
+name: Complete workflow
 
 on:
   push:
