@@ -38,6 +38,8 @@ public class Client {
                 Integer.valueOf(properties.getProperty("CHANNEL_3_PORT"))
             };
 
+            Integer serverport = Integer.parseInt(properties.getProperty("SERVER_PORT"));
+
             BlockingQueue<byte[]> packetBuffer = new LinkedBlockingQueue<>();
 
             JFrame frame = new JFrame("Web Radio Client");
@@ -71,7 +73,7 @@ public class Client {
                         packetPlaybackThread.killThread();
                     }
 
-                    packetRecieverThread = new PacketRecieverThread(packetBuffer, ipAddressField.getText(), channelPorts[channelDropdown.getSelectedIndex()], packetSize);
+                    packetRecieverThread = new PacketRecieverThread(packetBuffer, ipAddressField.getText(), channelPorts[channelDropdown.getSelectedIndex()], packetSize, serverport);
                     packetPlaybackThread = new PacketPlaybackThread(packetBuffer);
 
                     packetRecieverThread.start();
@@ -103,7 +105,7 @@ public class Client {
                         DatagramSocket socket = new DatagramSocket();
                         byte[] data = "close".getBytes();
                         InetAddress address = InetAddress.getByName(ipAddressField.getText());
-                        DatagramPacket packet = new DatagramPacket(data, data.length, address, 44000);
+                        DatagramPacket packet = new DatagramPacket(data, data.length, address, serverport);
                         socket.send(packet);
                         socket.close();
                     } catch (IOException exception) {

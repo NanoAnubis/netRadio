@@ -7,6 +7,7 @@ spec:
   ports:
   - port: 44000
     targetPort: 44000
+    nodePort: 30001
     protocol: UDP
     name: server-port
   selector:

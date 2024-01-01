@@ -45,7 +45,7 @@ public class ChannelThread extends Thread {
                         DatagramPacket packet = new DatagramPacket(buffer, bytesRead, this.address, this.channelPort);
                         socket.send(packet);
 
-                        System.out.println("Sending packets from: " + this.channelPort);
+                        //System.out.println("Sending packets from: " + this.channelPort);
 
                         Thread.sleep(sleepSwitch ? 12 : 9);
                         sleepSwitch = !sleepSwitch;

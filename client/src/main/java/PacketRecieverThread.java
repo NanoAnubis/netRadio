@@ -15,15 +15,15 @@ public class PacketRecieverThread extends ClientThreadBase {
     private final DatagramPacket packet;
 
     private final int packetSize;
-
+    private final int serverport;
     private final int channelPort;
     private final String address;
 
-    public PacketRecieverThread(BlockingQueue<byte[]> packetBuffer, String address, int channelPort, int packetSize) throws UnknownHostException, SocketException {
+    public PacketRecieverThread(BlockingQueue<byte[]> packetBuffer, String address, int channelPort, int packetSize, int serverport) throws UnknownHostException, SocketException {
         this.packetBuffer = packetBuffer;
         this.socket = new DatagramSocket(channelPort);
         this.packetSize = packetSize;
-
+        this.serverport = serverport;
         this.channelPort = channelPort;
         this.address = address;
 
@@ -35,7 +35,7 @@ public class PacketRecieverThread extends ClientThreadBase {
         try {
             byte[] data = "open".getBytes();
             InetAddress address = InetAddress.getByName(this.address);
-            DatagramPacket packet = new DatagramPacket(data, data.length, address, 44000);
+            DatagramPacket packet = new DatagramPacket(data, data.length, address, this.serverport);
             socket.send(packet);
 
             Thread thisThread = Thread.currentThread();
