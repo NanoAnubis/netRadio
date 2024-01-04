@@ -155,7 +155,7 @@ jobs:
       uses: azure/setup-kubectl@v1
     - name: Replace image in the Kubernetes deployment file
       run: |
-        sed -i 's|your-container:.*|your-container:${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest|' ./kubernetes/aks-deployment.yml
+        sed -i 's|your-container:.*|${{ env.REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest|' ./kubernetes/aks-deployment.yml
     - name: Load kubeconfig
       run: |
         echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
