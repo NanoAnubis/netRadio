@@ -58,15 +58,20 @@ __Configuration files__
 
 1. Azure CLI installed
 2. Active Azure subsriptions
-> az login
+`az login`
+> 
 > az cloud set --name AzureCloud
+> 
 > az account set --subscription "*subscription*"
 3. Permissions for creating service pricipals in an Azure AD
 > az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/*subscription*"
 4. Export the environment variables with the acquired information
 > export ARM\_CLIENT\_ID="*appId*"
+> 
 > export ARM\_CLIENT\_SECRET="*password*"
+> 
 > export ARM\_SUBSCRIPTION\_ID="*subscription*"
+> 
 > export ARM\_TENANT\_ID="*tenant*"
 5. Save the same variables in Terraform Cloud
 
@@ -91,10 +96,10 @@ __Configuration files__
 
 Infrastructure as a code (IaC) is a method of managing and provisioning infrastructure with configuration files rather than through a graphical user interface or custom scripts. IaC allows you to automate, standardize, and track changes to your infrastructure in a consistent and scalable way. IaC has many benefits, such as:
 
-* Faster speed and consistency: IaC eliminates the need for manual approvals, reviews, and human errors, and enables faster and more reliable deployments of infrastructure.
-* Scalability and elasticity: IaC allows you to provision and de-provision resources on demand, and adjust the infrastructure to the changing needs of your applications.
-* Cost optimization: IaC helps you reduce the waste and over-provisioning of resources, and pay only for what you use.
-* Configuration drift management: IaC ensures that your infrastructure is always in sync with the desired state, and prevents unauthorized or accidental changes.
-* Reusability and modularity: IaC enables you to use modules, templates, and variables to create reusable and shareable configurations that encapsulate common infrastructure patterns.
+* __Faster speed and consistency__: IaC eliminates the need for manual approvals, reviews, and human errors, and enables faster and more reliable deployments of infrastructure.
+* __Scalability and elasticity__: IaC allows you to provision and de-provision resources on demand, and adjust the infrastructure to the changing needs of your applications.
+* __Cost optimization__: IaC helps you reduce the waste and over-provisioning of resources, and pay only for what you use.
+* __Configuration drift management__: IaC ensures that your infrastructure is always in sync with the desired state, and prevents unauthorized or accidental changes.
+* __Reusability and modularity__: IaC enables you to use modules, templates, and variables to create reusable and shareable configurations that encapsulate common infrastructure patterns.
 
 Terraform is an Infrastructure as Code (IaC) tool that allows you to define and manage your infrastructure on various cloud platforms and services using configuration files. It uses a state file to track and reconcile the current and desired state of your infrastructure, and supports modules for reusing and sharing common infrastructure patterns. Terraform Cloud is a service that provides a consistent and reliable environment for teams to collaborate on Terraform projects, with features such as shared state, access controls, policy controls, and remote operations. Terraform Cloud also has different pricing tiers to suit your needs and budget and is free for small teams.
