@@ -40,8 +40,8 @@ __The job involves the following steps:__
 6. Shows the External IP of the service.
 
 __Deployment files:__
-* ./kubernetes/aks-deployment.yml - Deploys a pod with the given image.
-* ./kubernetes/aks-service.yml - Deploys a LoadBalancer service to the new pod.
+* aks-deployment.yml - Deploys a pod with the given image.
+* aks-service.yml - Deploys a LoadBalancer service to the new pod.
 
 # Terraform
 Terraform is a required part for successful workflow completion. The workflow deploys a Docker image to a Kubernetes cluster that is hosted in Azure (AKS).
