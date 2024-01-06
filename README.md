@@ -4,7 +4,7 @@
 # CI/CD Pipeline
 
 ## Stage 1: Style & Secret Checks
-Basic style and secret leakage checks are performed against the source files of the solution.
+Basic style and secret leakage checks are performed against the source files of the solution.
 
 * __Editorconfig check:__ verifies that the source files have consistent encodings, indentations, line endings, etc.
 * __Gitleaks check:__ makes sure that no secrets, passwords, tokens, etc. have been committed to source control.
@@ -87,7 +87,7 @@ __Configuration files__
 7. Destroy infrastructure when done
 > terraform destroy
 
-# Infrastructure as a Code - Vertical Deep Dive 
+# Infrastructure as a Code - Vertical Deep Dive
 
 Infrastructure as a code (IaC) is a method of managing and provisioning infrastructure with configuration files rather than through a graphical user interface or custom scripts. IaC allows you to automate, standardize, and track changes to your infrastructure in a consistent and scalable way. IaC has many benefits, such as:
 
