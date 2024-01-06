@@ -58,11 +58,12 @@ __Configuration files__
 
 1. Azure CLI installed
 2. Active Azure subsriptions
-> `az login`
-> 
-> `az cloud set --name AzureCloud`
-> 
-> `az account set --subscription "*subscription*"`
+
+`az login`
+ 
+`az cloud set --name AzureCloud` 
+
+`az account set --subscription "*subscription*"`
 3. Permissions for creating service pricipals in an Azure AD
 > `az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/*subscription*"`
 4. Export the environment variables with the acquired information
