@@ -58,39 +58,40 @@ __Configuration files__
 
 1. Azure CLI installed
 2. Active Azure subsriptions
-`az login`
+> `az login`
 > 
-> az cloud set --name AzureCloud
+> `az cloud set --name AzureCloud`
 > 
-> az account set --subscription "*subscription*"
+> `az account set --subscription "*subscription*"`
 3. Permissions for creating service pricipals in an Azure AD
-> az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/*subscription*"
+> `az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/*subscription*"`
 4. Export the environment variables with the acquired information
-> export ARM\_CLIENT\_ID="*appId*"
+> `export ARM\_CLIENT\_ID="*appId*"`
 > 
-> export ARM\_CLIENT\_SECRET="*password*"
+> `export ARM\_CLIENT\_SECRET="*password*"`
 > 
-> export ARM\_SUBSCRIPTION\_ID="*subscription*"
+> `export ARM\_SUBSCRIPTION\_ID="*subscription*"`
 > 
-> export ARM\_TENANT\_ID="*tenant*"
+> `export ARM\_TENANT\_ID="*tenant*"`
 5. Save the same variables in Terraform Cloud
 
 ## Steps
 
 1. Initiate login with Terraform Cloud - provide API token
-> terraform login
+> `terraform login`
 2. Initiate the directory and connect to Terraform Cloud
-> terraform init
+> `terraform init`
 3. Check configuration
-> terraform fmt
-> terraform validate
+> `terraform fmt`
+> 
+> `terraform validate`
 4. Apply configuration
-> terraform apply
+> `terraform apply`
 5. Get KUBECONFIG
-> terraform output kube_config
+> `terraform output kube_config`
 6. Save KUBECONFIG to Github variable for kubernetes deployment
 7. Destroy infrastructure when done
-> terraform destroy
+> `terraform destroy`
 
 # Infrastructure as a Code - Vertical Deep Dive
 
